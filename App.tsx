@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -25,6 +26,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import CreateWalletBtn from './Components/walletButton';
+import homeStyles from './Styles/homepage';
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -32,10 +36,10 @@ type SectionProps = PropsWithChildren<{
 function Section({children, title}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
+    <View style={homeStyles.sectionContainer}>
       <Text
         style={[
-          styles.sectionTitle,
+          homeStyles.sectionTitle,
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
@@ -44,7 +48,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
       </Text>
       <Text
         style={[
-          styles.sectionDescription,
+          homeStyles.sectionDescription,
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
@@ -54,6 +58,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
     </View>
   );
 }
+
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -68,51 +73,34 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
+      <View
+        
         style={backgroundStyle}>
-        <Header />
-        <View
+         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? Colors.black : Colors.white, 
+            height: '100%'
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          
+          <Section title="Wallet Generator">
+            <Text style={homeStyles.highlight}>Click</Text> the button below to create your wallet, copy and store
+            the seed phrase someplace safe.
+          </Section>   
+
+          <CreateWalletBtn></CreateWalletBtn>
+
+          
+          <Text style={homeStyles.mnemonic}>Mnemonic</Text>  
+                  
+
+          
+          
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+
 
 export default App;
