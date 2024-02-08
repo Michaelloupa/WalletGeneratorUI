@@ -1,4 +1,4 @@
-const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
 
 /**
  * Metro configuration
@@ -6,6 +6,19 @@ const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
  *
  * @type {import('metro-config').MetroConfig}
  */
-const config = {};
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+// Get the default Metro configuration for the project
+const defaultConfig = getDefaultConfig(__dirname);
+
+// Extend the sourceExts array
+const sourceExts = [...defaultConfig.resolver.sourceExts, 'ts', 'tsx'];
+
+// Create a new configuration object that includes the updated sourceExts
+const config = {
+  resolver: {
+    sourceExts,
+  },
+};
+
+module.exports = mergeConfig(defaultConfig, config);
+

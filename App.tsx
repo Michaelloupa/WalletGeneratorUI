@@ -1,106 +1,67 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+// Import React and necessary React Native components
+import React, { useState } from 'react';
+import { View, Text, Button, ActivityIndicator, StyleSheet } from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+// Import your library
+import { multichain } from 'multichain-wallet-react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  // State to store wallet info and loading state
+  const [walletInfo, setWalletInfo] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-import CreateWalletBtn from './Components/walletButton';
-import homeStyles from './Styles/homepage';
+  const generateWallet = async () => {
+    setIsLoading(true); // Start loading
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+    try {
+      console.log('About to generate wallet...');
+      const memonic = [
+        'cream',   'frozen', 
+        'weather', 'group',  
+        'track',   'parrot', 
+        'stove',   'just',   
+        'license', 'collect',
+        'mandate', 'arrest'  
+      ]
+      const memonic2 = memonic.join(' ')
+      const password = "kash"
+      const wallet = await multichain.getAddressFromMnemonic(memonic2)
+      console.log('Generated wallet:', wallet);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={homeStyles.sectionContainer}>
-      <Text
-        style={[
-          homeStyles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          homeStyles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+      // For demonstration, converting the response to a string to display
+      setWalletInfo(JSON.stringify(wallet, null, 2));
+    } catch (error) {
+      console.error('Error generating wallet:', error);
+      setWalletInfo('Failed to create wallet.');
+    }
 
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    setIsLoading(false); // Stop loading
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <View
-        
-        style={backgroundStyle}>
-         <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white, 
-            height: '100%'
-          }}>
-          
-          <Section title="Wallet Generator">
-            <Text style={homeStyles.highlight}>Click</Text> the button below to create your wallet, copy and store
-            the seed phrase someplace safe.
-          </Section>   
-
-          <CreateWalletBtn></CreateWalletBtn>
-
-          
-          <Text style={homeStyles.mnemonic}>Mnemonic</Text>  
-                  
-
-          
-          
-        </View>
-      </View>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Button title="Generate Wallet" onPress={generateWallet} disabled={isLoading} />
+      {isLoading && <ActivityIndicator size="large" />}
+      {walletInfo && <Text style={styles.walletInfo}>{walletInfo}</Text>}
+    </View>
   );
-}
+};
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  walletInfo: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    textAlign: 'center',
+  },
+});
 
 export default App;
